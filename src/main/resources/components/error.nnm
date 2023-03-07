@@ -1,0 +1,10 @@
+<div>
+    <h2>
+        [[${message}]]
+    </h2>
+    <div>
+        <ul th:each="stackTrace_ : ${stackTrace}">
+            <li th:text="${stackTrace_}"></li>
+        </ul>
+    </div>
+</div>
