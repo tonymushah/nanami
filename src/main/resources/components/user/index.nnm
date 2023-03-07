@@ -1,0 +1,8 @@
+<div>
+    <h3>User List</h3>
+    <div>
+        <ul th:each="user : ${users}">
+            <li>[(${user.username})] - [(${user.name})]</li>
+        </ul>
+    </div>
+</div>

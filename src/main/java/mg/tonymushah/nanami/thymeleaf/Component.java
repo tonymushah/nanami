@@ -2,6 +2,7 @@ package mg.tonymushah.nanami.thymeleaf;
 
 import java.util.ArrayList;
 
+import org.thymeleaf.IThrottledTemplateProcessor;
 import org.thymeleaf.context.AbstractContext;
 import org.thymeleaf.context.Context;
 
@@ -36,16 +37,29 @@ public class Component {
         this.component = component;
         this.setChildren(new ArrayList<Component>());
     }
+    public void useState(){}
     public String render(ComponentEngine engine){
+        this.useState();
         String children = new String();
         for (Component component : this.children) {
             children = children + component.render(engine);
-            System.out.println(children);
         }
         ContextWithChildren contextWithChildren = new ContextWithChildren(children);
         for(String var_name : this.getContext().getVariableNames()){
             contextWithChildren.setVariable(var_name, this.getContext().getVariable(var_name));
         }
         return engine.process(this.getComponent(), contextWithChildren);
+    }
+    public IThrottledTemplateProcessor renderThrottled(ComponentEngine engine){
+        this.useState();
+        String children = new String();
+        for (Component component : this.children) {
+            children = children + component.render(engine);
+        }
+        ContextWithChildren contextWithChildren = new ContextWithChildren(children);
+        for(String var_name : this.getContext().getVariableNames()){
+            contextWithChildren.setVariable(var_name, this.getContext().getVariable(var_name));
+        }
+        return engine.processThrottled(this.getComponent(), contextWithChildren);
     }
 }

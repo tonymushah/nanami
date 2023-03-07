@@ -1,0 +1,7 @@
+<div>
+    <h1>User Layout</h1>
+    <div>this is just the user layout</div>
+    <div>
+        [(${children})]
+    </div>
+</div>
