@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mg.tonymushah.nanami.router.StaticRoute;
+import mg.tonymushah.nanami.router.routes.StaticRoute;
 import mg.tonymushah.nanami.thymeleaf.Component;
 
 public class Tony extends StaticRoute<Object> {

@@ -1,4 +1,4 @@
-package mg.tonymushah.nanami.router;
+package mg.tonymushah.nanami.router.routes;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -26,6 +26,12 @@ public abstract class RootRoute<T> extends AbstractRoute<T> {
         String to_use_path = to_use_paths.length == 0 ? "" : to_use_paths[1];
         return this.getNestedRouteByName(to_use_path).getConstructor(HttpServletRequest.class, HttpServletResponse.class).newInstance(this.getRequest(), this.getResponse());
     }
+    @Override
+    public Component outlet(HashMap<String, Object> context) throws Exception {
+        AbstractRoute<?> getted = this.getOutletRoute();
+        getted.setRoot(this);
+        return getted.load(context);
+    }
     public RootRoute() {
         super(null, null);
         //TODO Auto-generated constructor stub
@@ -43,7 +49,7 @@ public abstract class RootRoute<T> extends AbstractRoute<T> {
             public void accept(Class<?> t) {
                 // TODO Auto-generated method stub
                 System.out.println();
-                if(AbstractRoute.class.isAssignableFrom(t)){
+                if(AbstractRoute.class.isAssignableFrom(t) == true && RootRoute.class.isAssignableFrom(t) == false){
                     routes.add((Class<? extends AbstractRoute<?>>) t);
                 }
             }
@@ -61,7 +67,14 @@ public abstract class RootRoute<T> extends AbstractRoute<T> {
         this.setResponse(response);
         return super.load(null);
     }
+    
 
+    public Object loadAction(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // TODO Auto-generated method stub
+        this.setRequest(request);
+        this.setResponse(response);
+        return super.loadAction();
+    }
     public String getTitle() {
         return title;
     }

@@ -7,8 +7,8 @@ import org.thymeleaf.context.Context;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mg.tonymushah.nanami.router.RootRoute;
-import mg.tonymushah.nanami.router.StaticRoute;
+import mg.tonymushah.nanami.router.routes.RootRoute;
+import mg.tonymushah.nanami.router.routes.StaticRoute;
 import mg.tonymushah.nanami.thymeleaf.Component;
 import mg.tonymushah.nanami.thymeleaf.ComponentEngine;
 

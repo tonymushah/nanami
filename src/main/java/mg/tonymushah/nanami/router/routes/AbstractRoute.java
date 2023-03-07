@@ -1,4 +1,4 @@
-package mg.tonymushah.nanami.router;
+package mg.tonymushah.nanami.router.routes;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -21,12 +21,12 @@ public abstract class AbstractRoute<T> {
     public Object loadAction() throws Exception{
         AbstractRoute<?> route = null;
         boolean isAtEnd = false;
-        boolean isRouteInitilized = false;
         while (isAtEnd == false) {
             try {
-                route = isRouteInitilized == false ? this.getOutletRoute() : route.getOutletRoute();
+                route = route == null ? this.getOutletRoute() : route.getOutletRoute();
             } catch (Exception e) {
                 isAtEnd = true;
+                e.printStackTrace();
             }
         }
         return route.action(this.getRequest(), this.getResponse());
@@ -83,15 +83,13 @@ public abstract class AbstractRoute<T> {
         Set<Class<?>> classes = AccessingAllClassesInPackage.findAllClasses(this.getClass().getName().toLowerCase());
         Set<Class<? extends AbstractRoute<?>>> routes = new HashSet<Class<? extends AbstractRoute<?>>>();
         classes.forEach(new Consumer<Class<?>>() {
-
             @Override
             public void accept(Class<?> t) {
                 // TODO Auto-generated method stub
-                if (AbstractRoute.class.isAssignableFrom(t)) {
+                if (AbstractRoute.class.isAssignableFrom(t) == true && RootRoute.class.isAssignableFrom(t) == false) {
                     routes.add((Class<? extends AbstractRoute<?>>) t);
                 }
             }
-
         });
         return routes;
     }

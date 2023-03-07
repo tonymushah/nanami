@@ -1,4 +1,4 @@
-package mg.tonymushah.nanami.router;
+package mg.tonymushah.nanami.router.routes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

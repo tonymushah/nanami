@@ -20,6 +20,7 @@ public class App {
             @Override
             public Component onException(Exception exception) {
                 // TODO Auto-generated method stub
+                exception.printStackTrace();
                 Component error = new Component(new Context(), "rootErrorHandle");
                 error.getContext().setVariable("message", exception.getMessage());
                 ArrayList<String> stackTrace = new ArrayList<String>();
@@ -29,7 +30,6 @@ public class App {
                 error.getContext().setVariable("stack", stackTrace);
                 return error;
             }
-
         };
         new NanamiApplication(router).run(args);
     }
