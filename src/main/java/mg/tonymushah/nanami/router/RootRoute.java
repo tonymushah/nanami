@@ -1,5 +1,6 @@
 package mg.tonymushah.nanami.router;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,15 +16,15 @@ public abstract class RootRoute<T> extends AbstractRoute<T> {
     private String title; 
 
     @Override
-    public Component outlet(HashMap<String, Object> context) throws Exception {
+    public AbstractRoute<?> getOutletRoute()
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            NoSuchMethodException, SecurityException, ClassNotFoundException, PackageNotFoundException {
         // TODO Auto-generated method stub
         String current_path = "/";
         String servelet_path = new String(this.getRequest().getServletPath());
         String[] to_use_paths = servelet_path.split(current_path);
         String to_use_path = to_use_paths.length == 0 ? "" : to_use_paths[1];
-        AbstractRoute<?> getted = this.getNestedRouteByName(to_use_path).getConstructor(HttpServletRequest.class, HttpServletResponse.class).newInstance(this.getRequest(), this.getResponse());
-        getted.setRoot(this);
-        return getted.load(context);
+        return this.getNestedRouteByName(to_use_path).getConstructor(HttpServletRequest.class, HttpServletResponse.class).newInstance(this.getRequest(), this.getResponse());
     }
     public RootRoute() {
         super(null, null);
@@ -53,12 +54,12 @@ public abstract class RootRoute<T> extends AbstractRoute<T> {
     public Component load(HttpServletRequest request, HttpServletResponse response, HashMap<String, ?> context) throws Exception{
         this.setRequest(request);
         this.setResponse(response);
-        return this.load(context);
+        return super.load(context);
     }
     public Component load(HttpServletRequest request, HttpServletResponse response) throws Exception{
         this.setRequest(request);
         this.setResponse(response);
-        return this.load(null);
+        return super.load(null);
     }
 
     public String getTitle() {

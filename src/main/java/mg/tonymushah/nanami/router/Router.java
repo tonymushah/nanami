@@ -18,10 +18,10 @@ import mg.tonymushah.nanami.thymeleaf.ComponentEngine;
 public abstract class Router extends HttpServlet {
     private RootRoute<?> root;
     private ComponentEngine engine;
-
+    
     public Router(RootRoute<?> root, ComponentEngine engine) {
-        this.root = root;
-        this.engine = engine;
+        this.setRoot(root);
+        this.setEngine(engine);
     }
 
     public RootRoute<?> getRoot() {
@@ -46,11 +46,11 @@ public abstract class Router extends HttpServlet {
                 Component getted = root.load(req, resp);
                 getted.renderThrottled(engine).processAll(resp.getOutputStream(), Charset.defaultCharset());
             } else {
-                
+                root.loadAction();
             }
         } catch (Exception e) {
             // TODO: handle exception
-            
+            this.onException(e).renderThrottled(engine).processAll(resp.getOutputStream(), Charset.defaultCharset());
         }
     }
 

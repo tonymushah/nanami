@@ -1,40 +1,36 @@
 package mg.tonymushah.nanami;
 
-import org.thymeleaf.TemplateEngine;
+import java.util.ArrayList;
+
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring6.SpringTemplateEngine;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
-import mg.tonymushah.utils.AccessingAllClassesInPackage;
-import mg.tonymushah.utils.exceptions.PackageNotFoundException;
-import pages.Index;
-
-import java.time.LocalDateTime;
-import java.util.Set;
+import mg.tonymushah.nanami.router.Router;
+import mg.tonymushah.nanami.thymeleaf.Component;
+import mg.tonymushah.nanami.thymeleaf.ComponentEngine;
+import pages.Root;
 
 /**
  * Hello world!
  *
  */
-public class App 
-{
-    public static void main( String[] args ) throws PackageNotFoundException {
-        Set<Class<?>> pages = AccessingAllClassesInPackage.findAllClasses("pages");
-        for (Class<?> page : pages) {
-            System.out.println(page.getSimpleName());
-            String package_ = String.format("%s", page.getName().toLowerCase());
-            System.out.println(package_);
-            System.out.println(page.getPackageName());
-            if(AccessingAllClassesInPackage.isPackageExist(package_)){
-                System.out.println(String.format("Outlet package for %s exist", page.getName()));
-                Set<Class<?>> pages_ = AccessingAllClassesInPackage.findAllClasses(package_);
-                for (Class<?> class1 : pages_) {
-                    System.out.println(class1.getSimpleName());
-                    System.out.println(class1.getPackageName());
+public class App {
+    public static void main(String[] args) {
+        Router router = new Router(new Root(), new ComponentEngine()) {
+
+            @Override
+            public Component onException(Exception exception) {
+                // TODO Auto-generated method stub
+                Component error = new Component(new Context(), "rootErrorHandle");
+                error.getContext().setVariable("message", exception.getMessage());
+                ArrayList<String> stackTrace = new ArrayList<String>();
+                for (StackTraceElement stackTraceElement : exception.getStackTrace()) {
+                    stackTrace.add(stackTraceElement.toString());
                 }
-                System.out.println();
+                error.getContext().setVariable("stack", stackTrace);
+                return error;
             }
-        }
+
+        };
+        new NanamiApplication(router).run(args);
     }
 }
